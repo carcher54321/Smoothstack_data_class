@@ -1,0 +1,20 @@
+INFO:root:------------------
+INFO:root:Jan-18 Data:
+INFO:root:Calls Offered: 16915
+INFO:root:Abandon after 30s: 2.32%
+INFO:root:FCR: 86.5%
+INFO:root:DSAT: 14.2%
+INFO:root:CSAT: 78.3%
+INFO:root:Promoters: 256, good
+INFO:root:Passives: 86, bad
+INFO:root:Detractors: 86, good
+INFO:root:------------------
+INFO:root:Mar-18 Data:
+INFO:root:Calls Offered: 22343
+INFO:root:Abandon after 30s: 3.05%
+INFO:root:FCR: 86.0%
+INFO:root:DSAT: 18.0%
+INFO:root:CSAT: 74.4%
+INFO:root:Promoters: 279, good
+INFO:root:Passives: 21, bad
+INFO:root:Detractors: 33, good
