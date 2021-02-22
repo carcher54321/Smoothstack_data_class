@@ -1,5 +1,5 @@
 INFO:root:------------------
-INFO:root:Jan-18 Data:
+INFO:root:1/2018 Data:
 INFO:root:Calls Offered: 16915
 INFO:root:Abandon after 30s: 2.32%
 INFO:root:FCR: 86.5%
@@ -8,8 +8,11 @@ INFO:root:CSAT: 78.3%
 INFO:root:Promoters: 256, good
 INFO:root:Passives: 86, bad
 INFO:root:Detractors: 86, good
+INFO:root:Overall NPS: 39.7%
+INFO:root:Sat With Agent: 78.3%
+INFO:root:DSat with Agent: 14.2%
 INFO:root:------------------
-INFO:root:Mar-18 Data:
+INFO:root:3/2018 Data:
 INFO:root:Calls Offered: 22343
 INFO:root:Abandon after 30s: 3.05%
 INFO:root:FCR: 86.0%
@@ -18,3 +21,6 @@ INFO:root:CSAT: 74.4%
 INFO:root:Promoters: 279, good
 INFO:root:Passives: 21, bad
 INFO:root:Detractors: 33, good
+INFO:root:Overall NPS: 28.74%
+INFO:root:Sat With Agent: 74.4%
+INFO:root:DSat with Agent: 18.0%

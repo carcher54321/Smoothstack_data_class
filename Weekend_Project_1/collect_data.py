@@ -3,57 +3,62 @@ import openpyxl as xl
 import datetime as dt
 
 logging.basicConfig(filename='mylog.log', level=logging.DEBUG)
+file_to_open = 'expedia_report_monthly_january_2018.xlsx'
 
 
 # get the shortened month/year from the file name
-def config_name(file_name):
-    MONTHS = {'january': 'Jan', 'february': 'Feb',
-              'march': 'Mar', 'april': 'Apr',
-              'may': 'May', 'june': 'Jun',
-              'july': 'Jul', 'august': 'Aug',
-              'september': 'Sep', 'october': 'Oct',
-              'november': 'Nov', 'december': 'Dec'}
+def get_date(file_name):
+    MONTHS = {'january': 1, 'february': 2,
+              'march': 3, 'april': 4,
+              'may': 5, 'june': 6,
+              'july': 7, 'august': 8,
+              'september': 9, 'october': 10,
+              'november': 11, 'december': 12}
     month, year = file_name.split('_')[-2:]
     try:
         month = MONTHS[month.lower()]
     except KeyError:
         logging.warning(f'Malformed filename: {file_name}')
-    return f'{month}-{year[2:4]}'
+    return month, int(year[:4])
 
 
 def collect_data(file_name):
-    def format_date(date):
-        if not (type(date) is dt.date or type(date) is dt.datetime):
-            logging.warning(f'Date Error: {date}')
-        MONTHS = [0, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        return f'{MONTHS[date.month]}-{str(date.year)[2:]}'
-
-    def collect_voc_data(sheet, name):
+    def collect_voc_data(sheet, month, year):
         def map_func(t):
             lb, num = t
+            ret = [lb, num]
             if lb == 'Promoters':
-                cat = 'good' if num > 200 else 'bad'
+                ret.append('good' if num > 200 else 'bad')
             elif lb == 'Passives':
-                cat = 'good' if num > 100 else 'bad'
-            else:
-                cat = 'good' if num < 100 else 'bad'
-            return lb, num, cat
+                ret.append('good' if num > 100 else 'bad')
+            elif lb == 'Detractors':
+                ret.append('good' if num < 100 else 'bad')
+            elif lb in ['Overall NPS', 'Sat With Agent', 'DSat with Agent']:
+                ret[1] = f'{num * 100}%'
+            return ret
+        # (label, cell row)
         form = [
             ('Promoters', 4),
             ('Passives', 6),
-            ('Detractors', 8)
+            ('Detractors', 8),
+            ('Overall NPS', 13),
+            ('Sat With Agent', 16),
+            ('DSat with Agent', 19)
         ]
         columns = 'BCDEFGHIJKLMNOPQRSTUVWX'
         data = []
         for c in columns:
-            if format_date(sheet[c + '1'].value) == name:
+            dte = sheet[c + '1'].value
+            if dte.month == month and dte.year == year:
                 for label, cell in form:
                     data.append([label, sheet[c + str(cell)].value])
+                break
         data = list(map(map_func, data))
-        for label, total, c in data:
-            logging.info(f'{label}: {total}, {c}')
+        for r in data:
+            logging.info(f'{r[0]}: ' + ', '.join([str(x) for x in r[1:]]))
 
-    def collect_sum_data(sheet, name):
+    def collect_sum_data(sheet, month, year):
+        # (label, column)
         form = [
             ('Calls Offered', 'B#'),
             ('Abandon after 30s', 'C#'),
@@ -64,10 +69,12 @@ def collect_data(file_name):
         data = []
         # find the right row
         for n in range(2, 14):
-            if format_date(sheet[f'A{n}'].value) == name:
+            dte = sheet[f'A{n}'].value
+            if dte.month == month and dte.year == year:
                 # gather data
                 for label, cell in form:
                     data.append([label, sheet[cell.replace('#', str(n))].value])
+                break
         # convert percentages
         data = list(map(lambda x: [x[0], f'{x[1] * 100}%'] if x[1] < 1 else x, data))
         for label, value in data:
@@ -76,14 +83,14 @@ def collect_data(file_name):
     wb = xl.load_workbook(file_name, data_only=True)
     summary_sheet = wb['Summary Rolling MoM']
     voc_sheet = wb['VOC Rolling MoM']
-    c_name = config_name(file_name)
+    mo, yr = get_date(file_name)
     logging.info('------------------')
-    logging.info(f'{c_name} Data:')
-    collect_sum_data(summary_sheet, c_name)
-    collect_voc_data(voc_sheet, c_name)
+    logging.info(f'{mo}/{yr} Data:')
+    collect_sum_data(summary_sheet, mo, yr)
+    collect_voc_data(voc_sheet, mo, yr)
 
 
-collect_data('expedia_report_monthly_march_2018.xlsx')
+collect_data(file_to_open)
 
 
 # fix the data in the march spreadsheet to match the correct format
