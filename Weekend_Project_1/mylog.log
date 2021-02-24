@@ -1,26 +1,28 @@
-INFO:root:------------------
-INFO:root:1/2018 Data:
+INFO:root:-----------------------
+INFO:root:Data for 1/2018
 INFO:root:Calls Offered: 16915
 INFO:root:Abandon after 30s: 2.32%
 INFO:root:FCR: 86.5%
 INFO:root:DSAT: 14.2%
 INFO:root:CSAT: 78.3%
-INFO:root:Promoters: 256, good
-INFO:root:Passives: 86, bad
-INFO:root:Detractors: 86, good
-INFO:root:Overall NPS: 39.7%
-INFO:root:Sat With Agent: 78.3%
-INFO:root:DSat with Agent: 14.2%
-INFO:root:------------------
-INFO:root:3/2018 Data:
+INFO:root:Base Size: 425
+INFO:root:Promoters (Recommend Score 9 to 10): 256, good
+INFO:root:Passives (Recommend Score 7 to 8): 86, bad
+INFO:root:Detractors (recommend Score 0 to 6): 86, good
+INFO:root:Overall NPS %: 39.7%
+INFO:root:Sat with Agent %: 78.3%
+INFO:root:DSat with Agent %: 14.2%
+INFO:root:-----------------------
+INFO:root:Data for 3/2018
 INFO:root:Calls Offered: 22343
 INFO:root:Abandon after 30s: 3.05%
 INFO:root:FCR: 86.0%
 INFO:root:DSAT: 18.0%
 INFO:root:CSAT: 74.4%
-INFO:root:Promoters: 279, good
-INFO:root:Passives: 21, bad
-INFO:root:Detractors: 33, good
-INFO:root:Overall NPS: 28.74%
-INFO:root:Sat With Agent: 74.4%
-INFO:root:DSat with Agent: 18.0%
+INFO:root:Base Size: 508
+INFO:root:Promoters (Recommend Score 9 to 10): 279, good
+INFO:root:Passives (Recommend Score 7 to 8): 21, bad
+INFO:root:Detractors (recommend Score 0 to 6): 33, good
+INFO:root:Overall NPS %: 28.74%
+INFO:root:Sat with Agent %: 74.4%
+INFO:root:DSat with Agent %: 18.0%
