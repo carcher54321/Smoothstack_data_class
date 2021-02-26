@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-import sklearn
-from sklearn import linear_model
 
 data_set = pd.read_csv('Salaries.csv')
 
@@ -42,10 +40,7 @@ print(f"MinPaidAmt: {min_paid['TotalPayBenefits']}")
 # Joe Lopez's pay is negative
 
 # What was the average (mean) TotalPay of all employees per year? (2011-2014)
-avgs = {}
-for y in [2011, 2012, 2013, 2014]:
-    avgs[y] = average(data_set.loc[data_set['Year'] == y]['TotalPay'])
-print(avgs)
+print(data_set.groupby('Year').mean())
 
 # How many unique job titles are there?
 unique_jobs = data_set['JobTitle'].value_counts()
@@ -65,34 +60,9 @@ print(f"Number of job titles which contain 'Chief': {len(data_set.loc[data_set['
 
 # Is there a correlation between length of the Job Title string and Salary?
 
-# It seemed based off of the top and bottom rows of the data that there would be a correlation,
-# but the linear regression models I've run never get above 1% accuracy so I'm going to say no
-stripped_data = data_set[['JobTitle', 'TotalPayBenefits']]
-stripped_data.loc[:, 'TitleLength'] = stripped_data['JobTitle'].apply(lambda x: len(x))
-stripped_data = stripped_data.drop('JobTitle', axis=1)
-x = np.array(stripped_data['TitleLength']).reshape(-1, 1)
-y = np.array(stripped_data['TotalPayBenefits'])
-
-
-def train(times):
-    bestScore = 0
-    bestModel = None
-    for i in range(times):
-        x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.1)
-
-        linear = linear_model.LinearRegression()
-        linear.fit(x_train, y_train)
-        acc = linear.score(x_test, y_test)
-
-        if acc > bestScore:
-            print(acc)
-            bestScore = acc
-            bestModel = linear
-    return bestModel
-
-
-mod = train(30)
-print(f'Best fit line: Pay = {mod.coef_}*Length + {mod.intercept_} ')
+# Because the correlation is so close to 0 (-0.036), I'd say there is not a
+# statistically significant correlation
+print(data_set['JobTitle'].apply(lambda x: len(x)).corr(data_set['TotalPayBenefits']))
 
 """
 OUTPUT:
@@ -138,7 +108,12 @@ MinPaidName: 148653    Joe Lopez
 Name: EmployeeName, dtype: object
 MinPaidAmt: 148653   -618.13
 Name: TotalPayBenefits, dtype: float64
-{2011: 71744.1, 2012: 74113.26, 2013: 77611.44, 2014: 75463.92}
+            Id      TotalPay  TotalPayBenefits  Notes
+Year                                                 
+2011   18080.0  71744.103871      71744.103871    NaN
+2012   54542.5  74113.262265     100553.229232    NaN
+2013   91728.5  77611.443142     101440.519714    NaN
+2014  129593.0  75463.918140     100250.918884    NaN
 Unique Job Titles: 2159
 Transit Operator                7036
 Special Nurse                   4389
@@ -150,11 +125,7 @@ TRANSIT OPERATOR                2388
 Name: JobTitle, dtype: int64
 Number of jobs in 2013 with one occurrence: 202
 Number of job titles which contain 'Chief': 423
-0.002226757541872848
-0.002524337735586024
-0.0027075431324866672
-Best fit line: Pay = [-301.61790236]*Length + 99471.8328998684 
+-0.03687844593260708
 
 Process finished with exit code 0
-
 """
